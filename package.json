@@ -7,6 +7,7 @@
   "repository": "akshay-nm/use-form-state",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
+  "private": false,
   "source": "src/index.js",
   "engines": {
     "node": ">=10"
