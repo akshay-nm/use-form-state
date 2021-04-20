@@ -12,6 +12,62 @@ npm install --save @akshay-nm/use-form-state
 
 ## Usage
 
+### Configuration
+
+The hook takes an object as configuration. Let's assume `config` is the configuration object to be passed to the hook.
+
+For each form field, you need:
+
+- value
+- onChangeHandler
+- showWarning
+
+To generate these, the hook needs:
+
+- name of the field
+- default value of the field
+- validator
+- is the field valid by default
+- is this field mandatory (should the field affect the overall form validity or not)
+
+So for each field you have to pass configuration:
+
+```jsx
+{
+  name: 'nameInCamelCase', // Although I have added a camelize check but still...
+  default: '', // the default value of field
+  defaultIsValid: false, // is the field valid by default
+  mustBeValid: true, // is the field mandatory
+  validator: (value) => true // the validator
+},
+```
+
+You pass the fields as an array named `states`.
+
+```jsx
+const config = {
+  states: [
+    {
+      name: 'email',
+      default: '',
+      defaultIsValid: false,
+      mustBeValid: true,
+      validator: () => true
+    },
+    {
+      name: 'password',
+      default: '',
+      defaultIsValid: false,
+      mustBeValid: true,
+      validator: (val) => val.length > 5
+    }
+  ],
+  debug: false // if you want logs
+}
+```
+
+## Complete example
+
 ```jsx
 import React from 'react'
 
@@ -25,11 +81,21 @@ export default App
 ```
 
 ```jsx
-import { useState } from 'react'
-import useFormState from '@akshay-nm/use-form-state'
+import React, { useCallback } from 'react'
+import useLoginFormState from '@akshay-nm/use-form-state'
 
-const useLoginFormState = () => {
-  const [spec] = useState({
+const Login = () => {
+  const {
+    isValid: formIsValid,
+    isValidating,
+    resetForm,
+    email,
+    showEmailWarning,
+    onEmailChange,
+    password,
+    showPasswordWarning,
+    onPasswordChange
+  } = useFormState({
     states: [
       {
         name: 'email',
@@ -45,50 +111,9 @@ const useLoginFormState = () => {
         mustBeValid: true,
         validator: (val) => val.length > 5
       }
-    ]
+    ],
+    debug: false
   })
-
-  const [
-    isValid,
-    isValidating,
-    values,
-    warnings,
-    onChangeHandlers,
-    resetFormState
-  ] = useFormState(spec, true) // you can pass true as the second parameter if you want to see some logs
-
-  return [
-    isValid,
-    isValidating,
-    resetFormState,
-    values[0],
-    warnings[0],
-    onChangeHandlers[0],
-    values[1],
-    warnings[1],
-    onChangeHandlers[1]
-  ]
-}
-
-export default useLoginFormState
-```
-
-```jsx
-import React, { useCallback } from 'react'
-import useLoginFormState from './useLoginFormState'
-
-const Login = () => {
-  const [
-    formIsValid,
-    isValidating,
-    resetForm,
-    email,
-    showEmailWarning,
-    onEmailChange,
-    password,
-    showPasswordWarning,
-    onPasswordChange
-  ] = useLoginFormState()
 
   const login = useCallback(() => {
     console.log('Send login request, form is valid: ', formIsValid)
