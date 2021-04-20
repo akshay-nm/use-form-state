@@ -1,50 +1,111 @@
 import { useState, useEffect, useCallback } from 'react';
 
-var useFormState = function useFormState(spec, debug) {
-  if (debug === void 0) {
-    debug = false;
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  }).replace(/\s+/g, '');
+}
+
+var generateReturnPayload = function generateReturnPayload(names, values, warnings, onChangeHandlers) {
+  if (names === void 0) {
+    names = [];
   }
 
-  var _useState = useState(spec.states.map(function (state) {
+  if (values === void 0) {
+    values = [];
+  }
+
+  if (warnings === void 0) {
+    warnings = [];
+  }
+
+  if (onChangeHandlers === void 0) {
+    onChangeHandlers = [];
+  }
+
+  var payload = {};
+
+  if (names.length === values.length && values.length === warnings.length && warnings.length === onChangeHandlers.length) {
+    names.forEach(function (name, i) {
+      payload[camelize(name)] = values[i];
+      payload[camelize("on " + name + " Change")] = onChangeHandlers[i];
+      payload[camelize("show " + name + " Warning")] = warnings[i];
+    });
+  } else {
+    names.forEach(function (name) {
+      payload[camelize(name)] = '';
+
+      payload[camelize("on " + name + " Change")] = function () {};
+
+      payload[camelize("show " + name + " Warning")] = false;
+    });
+  }
+
+  return payload;
+};
+
+var useFormState = function useFormState(_ref) {
+  var states = _ref.states,
+      debug = _ref.debug;
+
+  var _useState = useState(states.map(function (state) {
     return state.name;
   })),
       names = _useState[0];
 
-  var _useState2 = useState(spec.states.map(function (state) {
+  var _useState2 = useState(states.map(function (state) {
     return state["default"];
   })),
       values = _useState2[0],
       setValues = _useState2[1];
 
-  var _useState3 = useState(spec.states.map(function (state) {
+  var _useState3 = useState(states.map(function (state) {
     return state.mustBeValid;
   })),
       mandatory = _useState3[0];
 
-  var _useState4 = useState(spec.states.map(function (state) {
+  var _useState4 = useState(states.map(function (state) {
     return state.validator;
   })),
       validators = _useState4[0];
 
-  var _useState5 = useState(spec.states.map(function (state) {
+  var _useState5 = useState(states.map(function (state) {
     return state.isValid;
   })),
       valids = _useState5[0],
       setValids = _useState5[1];
 
-  var _useState6 = useState(spec.states.map(function () {
+  var _useState6 = useState(states.map(function () {
     return false;
   })),
       needValidations = _useState6[0],
       setNeedValidations = _useState6[1];
 
-  var _useState7 = useState(spec.states.map(function () {
+  var _useState7 = useState(states.map(function () {
     return false;
   })),
       edits = _useState7[0],
       setEdits = _useState7[1];
 
-  var _useState8 = useState(spec.states.map(function () {
+  var _useState8 = useState(states.map(function () {
     return false;
   })),
       warnings = _useState8[0],
@@ -139,26 +200,26 @@ var useFormState = function useFormState(spec, debug) {
     });
   }, []);
   var reset = useCallback(function () {
-    setValues(spec.states.map(function (state) {
+    setValues(states.map(function (state) {
       return state["default"];
     }));
-    setValids(spec.states.map(function (state) {
+    setValids(states.map(function (state) {
       return state.isValid;
     }));
-    setNeedValidations(spec.states.map(function () {
+    setNeedValidations(states.map(function () {
       return false;
     }));
     setIsValid(false);
-  }, [spec]);
+  }, [states]);
   var resetState = useCallback(function (index) {
     setValues(function (prev) {
       var arr = [].concat(prev);
-      arr[index] = spec.states[index]["default"];
+      arr[index] = states[index]["default"];
       return arr;
     });
     setValids(function (prev) {
       var arr = [].concat(prev);
-      arr[index] = spec.states[index].defaultIsValid;
+      arr[index] = states[index].defaultIsValid;
       return arr;
     });
     setNeedValidations(function (prev) {
@@ -166,7 +227,7 @@ var useFormState = function useFormState(spec, debug) {
       arr[index] = false;
       return arr;
     });
-  }, [spec]);
+  }, [states]);
   var setState = useCallback(function (index, value, isValid, needsValidation) {
     setValues(function (prev) {
       var arr = [].concat(prev);
@@ -185,21 +246,21 @@ var useFormState = function useFormState(spec, debug) {
     });
   }, []);
 
-  var _useState11 = useState(spec.states.map(function (state, index) {
+  var _useState11 = useState(states.map(function (state, index) {
     return function (value) {
       return onChangeHandler(index, value);
     };
   })),
       onChangeHandlers = _useState11[0];
 
-  var _useState12 = useState(spec.states.map(function (state, index) {
+  var _useState12 = useState(states.map(function (state, index) {
     return function () {
       return resetState(index);
     };
   })),
       resetStates = _useState12[0];
 
-  var _useState13 = useState(spec.states.map(function (state, index) {
+  var _useState13 = useState(states.map(function (state, index) {
     return function (value, isValid, needsValidation) {
       return setState(index, value, isValid, needsValidation);
     };
@@ -239,7 +300,23 @@ var useFormState = function useFormState(spec, debug) {
   useEffect(function () {
     if (debug) console.log('form state: onChangeHandlers: ', onChangeHandlers);
   }, [debug, onChangeHandlers]);
-  return [isValid, isValidating, values, warnings, onChangeHandlers, triggerWarnings, triggerValidation, reset, resetStates, setStates, names];
+
+  var _useState14 = useState(generateReturnPayload(names, values, warnings, onChangeHandlers)),
+      payload = _useState14[0],
+      setPayload = _useState14[1];
+
+  useEffect(function () {
+    setPayload(generateReturnPayload(names, values, warnings, onChangeHandlers));
+  }, [names, values, warnings, onChangeHandlers]);
+  return _extends({
+    isValid: isValid,
+    isValidating: isValidating,
+    triggerWarnings: triggerWarnings,
+    triggerValidation: triggerValidation,
+    reset: reset,
+    resetStates: resetStates,
+    setStates: setStates
+  }, payload);
 };
 
 export default useFormState;
