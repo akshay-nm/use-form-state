@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import useLoginFormState from './useLoginFormState'
+import useFormState from '@akshay-nm/use-form-state'
 
 const Login = () => {
-  const [
-    formIsValid,
+  const {
+    isValid: formIsValid,
     isValidating,
     resetForm,
     email,
@@ -12,7 +12,25 @@ const Login = () => {
     password,
     showPasswordWarning,
     onPasswordChange
-  ] = useLoginFormState()
+  } = useFormState({
+    states: [
+      {
+        name: 'email',
+        default: '',
+        defaultIsValid: false,
+        mustBeValid: true,
+        validator: () => true
+      },
+      {
+        name: 'password',
+        default: '',
+        defaultIsValid: false,
+        mustBeValid: true,
+        validator: (val) => val.length > 5
+      }
+    ],
+    debug: false
+  })
 
   const login = useCallback(() => {
     console.log('Send login request, form is valid: ', formIsValid)
