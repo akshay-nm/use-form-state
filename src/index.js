@@ -10,24 +10,28 @@ const generateReturnPayload = (
   names = [],
   values = [],
   warnings = [],
-  onChangeHandlers = []
+  onChangeHandlers = [],
+  valids = []
 ) => {
   const payload = {}
   if (
     names.length === values.length &&
     values.length === warnings.length &&
-    warnings.length === onChangeHandlers.length
+    warnings.length === onChangeHandlers.length &&
+    onChangeHandlers.length === valids.length
   ) {
     names.forEach((name, i) => {
       payload[camelize(name)] = values[i]
       payload[camelize(`on ${name} Change`)] = onChangeHandlers[i]
       payload[camelize(`show ${name} Warning`)] = warnings[i]
+      payload[camelize(`is ${name} valid`)] = valids[i]
     })
   } else {
     names.forEach((name) => {
       payload[camelize(name)] = ''
       payload[camelize(`on ${name} Change`)] = () => {}
       payload[camelize(`show ${name} Warning`)] = false
+      payload[camelize(`is ${name} valid`)] = false
     })
   }
   return payload
