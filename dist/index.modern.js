@@ -24,7 +24,7 @@ function camelize(str) {
   }).replace(/\s+/g, '');
 }
 
-var generateReturnPayload = function generateReturnPayload(names, values, warnings, onChangeHandlers) {
+var generateReturnPayload = function generateReturnPayload(names, values, warnings, onChangeHandlers, valids) {
   if (names === void 0) {
     names = [];
   }
@@ -41,13 +41,18 @@ var generateReturnPayload = function generateReturnPayload(names, values, warnin
     onChangeHandlers = [];
   }
 
+  if (valids === void 0) {
+    valids = [];
+  }
+
   var payload = {};
 
-  if (names.length === values.length && values.length === warnings.length && warnings.length === onChangeHandlers.length) {
+  if (names.length === values.length && values.length === warnings.length && warnings.length === onChangeHandlers.length && onChangeHandlers.length === valids.length) {
     names.forEach(function (name, i) {
       payload[camelize(name)] = values[i];
       payload[camelize("on " + name + " Change")] = onChangeHandlers[i];
       payload[camelize("show " + name + " Warning")] = warnings[i];
+      payload[camelize("is " + name + " valid")] = valids[i];
     });
   } else {
     names.forEach(function (name) {
@@ -56,6 +61,7 @@ var generateReturnPayload = function generateReturnPayload(names, values, warnin
       payload[camelize("on " + name + " Change")] = function () {};
 
       payload[camelize("show " + name + " Warning")] = false;
+      payload[camelize("is " + name + " valid")] = false;
     });
   }
 
