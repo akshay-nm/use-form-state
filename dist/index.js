@@ -307,7 +307,7 @@ var useFormState = function useFormState(_ref) {
     if (debug) console.log('form state: onChangeHandlers: ', onChangeHandlers);
   }, [debug, onChangeHandlers]);
 
-  var _useState14 = react.useState(generateReturnPayload(names, values, warnings, onChangeHandlers)),
+  var _useState14 = react.useState(generateReturnPayload(names, values, warnings, onChangeHandlers, valids)),
       payload = _useState14[0],
       setPayload = _useState14[1];
 

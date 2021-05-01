@@ -231,7 +231,7 @@ const useFormState = ({ states, debug }) => {
   }, [debug, onChangeHandlers])
 
   const [payload, setPayload] = useState(
-    generateReturnPayload(names, values, warnings, onChangeHandlers)
+    generateReturnPayload(names, values, warnings, onChangeHandlers, valids)
   )
 
   useEffect(() => {
