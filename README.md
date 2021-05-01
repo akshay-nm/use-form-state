@@ -4,6 +4,9 @@
 
 [![NPM](https://img.shields.io/npm/v/@akshay-nm/use-form-state.svg)](https://www.npmjs.com/package/@akshay-nm/use-form-state) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+### Getting started + Motivation behind this hook on medium:
+**Read this:** https://medium.com/sdiot-technologies/akshay-nm-use-form-state-23d8406af540
+
 ## Install
 
 ```bash
