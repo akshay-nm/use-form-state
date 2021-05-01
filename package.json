@@ -1,6 +1,6 @@
 {
   "name": "@akshay-nm/use-form-state",
-  "version": "2.1.0",
+  "version": "2.1.1-rc",
   "description": "A hook to help you manage your form state declaratively.",
   "author": "akshay-nm",
   "license": "MIT",

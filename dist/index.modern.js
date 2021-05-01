@@ -198,8 +198,8 @@ const useFormState = ({
   }, [debug, onChangeHandlers]);
   const [payload, setPayload] = useState(generateReturnPayload(names, values, warnings, onChangeHandlers, valids));
   useEffect(() => {
-    setPayload(generateReturnPayload(names, values, warnings, onChangeHandlers));
-  }, [names, values, warnings, onChangeHandlers]);
+    setPayload(generateReturnPayload(names, values, warnings, onChangeHandlers, valids));
+  }, [names, values, warnings, onChangeHandlers, valids]);
   return {
     isValid,
     isValidating,

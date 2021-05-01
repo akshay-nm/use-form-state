@@ -312,8 +312,8 @@ var useFormState = function useFormState(_ref) {
       setPayload = _useState14[1];
 
   react.useEffect(function () {
-    setPayload(generateReturnPayload(names, values, warnings, onChangeHandlers));
-  }, [names, values, warnings, onChangeHandlers]);
+    setPayload(generateReturnPayload(names, values, warnings, onChangeHandlers, valids));
+  }, [names, values, warnings, onChangeHandlers, valids]);
   return _extends({
     isValid: isValid,
     isValidating: isValidating,
