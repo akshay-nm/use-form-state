@@ -10,10 +10,15 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
+    "@akshay-nm/use-form-state": "link:..",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.2",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.4",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
     "react-scripts": "link:../node_modules/react-scripts",
-    "@akshay-nm/use-form-state": "link:.."
+    "typescript": "^4.2.4"
   },
   "devDependencies": {
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
@@ -21,6 +26,13 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "keywords": [
+    "react",
+    "react-hook",
+    "forms",
+    "form-state",
+    "declarative"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
