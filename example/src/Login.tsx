@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
-import useFormState from '@akshay-nm/use-form-state'
+import { useFormState } from '@akshay-nm/use-form-state'
 
 const Login = () => {
   const {
     isValid: formIsValid,
     isValidating,
-    resetForm,
+    resetStates,
     email,
     showEmailWarning,
     onEmailChange,
@@ -16,14 +16,14 @@ const Login = () => {
     states: [
       {
         name: 'email',
-        default: '',
+        defaultValue: '',
         defaultIsValid: false,
         mustBeValid: true,
         validator: () => true
       },
       {
         name: 'password',
-        default: '',
+        defaultValue: '',
         defaultIsValid: false,
         mustBeValid: true,
         validator: (val) => val.length > 5
@@ -82,7 +82,7 @@ const Login = () => {
         </button>
         <button
           className={`px-2 py-1 border rounded`}
-          onClick={resetForm}
+          onClick={resetStates}
           disabled={isValidating}
         >
           Clear
